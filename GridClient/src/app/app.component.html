@@ -1,0 +1,442 @@
+<div class="grid-wrapper">
+  <ejs-tooltip #tooltip target=".e-rowcell" (beforeRender)="beforeRender($event)">
+                   <ejs-grid [dataSource]='data' [allowPaging]="true" [allowSorting]="true" [allowFiltering]="true"
+  [pageSettings]="pageSettings" [editSettings]="editSettings" [toolbar]="toolbar" (commandClick)="commandClick($event)" [filterSettings]="filterSettings" (actionBegin)="actionBegin($event)" (actionComplete)="actionComplete($event)">
+  <e-columns>
+      <e-column field='productId' headerText='Product ID' textAlign='Right' width=150 isPrimaryKey='true' [template]="idTemplate"></e-column>
+      <e-column field='productName' headerText="Product" width="260" [template]="productTemplate"  [customAttributes]="{ class: 'pn-cell' }"></e-column>
+      <e-column field='category' headerText='Category' width=120  [customAttributes]="{ class: 'pn-cell' }"></e-column>
+      <e-column field='brand' headerText='Brand' width=120></e-column>
+      <e-column field="rating" headerText="Rating" width="150" [template]="ratingTmpl"  textAlign="Right"></e-column>
+      <e-column field='mrp' headerText='MRP' width=120 [format]="{ format: 'C2', currency: 'INR' }" textAlign="Right"></e-column>
+      <e-column field='discount' headerText='Discount' width=110 [format]="{ format: 'P0' }"  textAlign="Right"
+     ></e-column>
+      <e-column field='stockQuantity' headerText='Quantity' width=110 [template]="stockQtyTmpl"  textAlign="Right"></e-column>
+      <e-column field='stockStatus' headerText='Stock Status' width=150  [template]="stockStatusTmpl"></e-column> 
+      <e-column headerText='Commands' width=150 [commands]='commands'></e-column> 
+  </e-columns>
+    
+<!-- Edit dialog template: two-column layout -->
+
+<ng-template #editSettingsTemplate let-data>
+  <form ngForm #productForm="ngForm" class="edit-dialog-form two-col">
+    <!-- Top row: ID + Name -->
+    <div class="form-row">
+      <div class="form-field">
+        <label>Product ID</label>
+        <div class="e-input-group" [ngClass]="{'e-disabled': !data?.isAdd}">
+          <input
+            class="e-input e-field"
+            name="productId"
+            [(ngModel)]="productData.productId"
+            required
+            [attr.disabled]="!data?.isAdd ? '' : null"
+            type="text"
+          />
+        </div>
+      </div>
+      <div class="form-field">
+        <label>Product Name</label>
+        <input
+          class="e-input e-field"
+          name="productName"
+          [(ngModel)]="productData.productName"
+          required
+          type="text"
+        />
+      </div>
+    </div>
+
+    <!-- Row: Category + Brand -->
+    <div class="form-row">
+      <div class="form-field">
+        <label>Category</label> 
+         <ejs-dropdownlist
+          id="category"
+          name="category"
+          [(value)]="productData.category"          
+          [dataSource]="categoryData"
+          [fields]="{ text: 'text', value: 'value' }"
+          placeholder="Select category"
+          popupHeight="240px">
+        </ejs-dropdownlist>
+      </div>
+
+      <div class="form-field">
+        <label>Brand</label>
+        <ejs-dropdownlist
+          id="brand"
+          name="brand"
+          [(value)]="productData.brand"          
+          [dataSource]="brandData"
+          [fields]="{ text: 'text', value: 'value' }"
+          placeholder="Select brand"
+          popupHeight="240px">
+        </ejs-dropdownlist>
+      </div>
+    </div>
+
+    <!-- ✅ Full-width: Product Image -->
+    <div class="form-row full">
+      <div class="form-field image-upload-field">
+        <label>Product Image</label>
+        <div class="image-field">
+          <img
+            *ngIf="productData.productImage"
+            [src]="productData.productImage"
+            alt="product image"
+            class="preview"
+          />
+          <ejs-uploader
+            id="productImageUploader"
+            [multiple]="false"
+            [asyncSettings]="path"
+            [allowedExtensions]="'.png,.jpg,.jpeg,.webp'"
+            (selected)="onFileSelected($event)"
+            (success)="onUploadSuccess($event)">
+          </ejs-uploader>
+        </div>
+      </div>
+    </div>
+
+    <!-- Row: MRP + Discount -->
+    <div class="form-row">
+      <div class="form-field">
+        <label>MRP</label>
+        <ejs-numerictextbox
+          id="mrp"
+          name="mrp"
+          [(ngModel)]="productData.mrp"
+          [min]="100"
+          format="c0"
+          currency="INR"
+          decimals="0">
+        </ejs-numerictextbox>
+      </div>
+      <div class="form-field">
+        <label>Discount (%)</label>
+        <ejs-numerictextbox
+          id="discount"
+          name="discount"
+          [(ngModel)]="productData.discount"
+          [max]="10"
+          format="p0"
+          >
+        </ejs-numerictextbox>
+      </div>
+    </div>
+
+    <!-- Row: Stock Quantity + Stock Status -->
+    <div class="form-row">
+      <div class="form-field">
+        <label>Stock Quantity</label>
+        <ejs-numerictextbox
+          id="stockQuantity"
+          name="stockQuantity"
+          [(ngModel)]="productData.stockQuantity"
+          [min]="0"
+          decimals="0">
+        </ejs-numerictextbox>
+      </div>
+      <div class="form-field">
+        <label>Stock Status</label>
+        <ejs-dropdownlist
+          id="stockStatus"
+          name="stockStatus"
+          [(value)]="productData.stockStatus"          
+          [dataSource]="stockStatusOptions"
+          [fields]="{ text: 'text', value: 'value' }"
+          placeholder="Select status"
+          popupHeight="240px">
+        </ejs-dropdownlist>
+      </div>
+    </div>
+
+    <!-- Row: Rating + Minimum Order Qty -->
+    <div class="form-row">
+      <div class="form-field">
+        <label>Rating</label>
+        <ejs-numerictextbox
+          id="rating"
+          name="rating"
+          [(ngModel)]="productData.rating"
+          [min]="0"
+          [max]="5"
+          step="0.1"
+          decimals="1">
+        </ejs-numerictextbox>
+      </div>
+      <div class="form-field">
+        <label>Minimum Order Qty</label>
+        <ejs-numerictextbox
+          id="minimumOrderQuantity"
+          name="minimumOrderQuantity"
+          [(ngModel)]="productData.minimumOrderQuantity"
+          [min]="1"
+          decimals="0">
+        </ejs-numerictextbox>
+      </div>
+    </div>
+
+    <!-- Row: Warranty + Country -->
+    <div class="form-row">
+      <div class="form-field">
+        <label>Warranty (Years)</label>
+        <ejs-numerictextbox
+          id="warrantyPeriod"
+          name="warrantyPeriod"
+          [(ngModel)]="productData.warrantyPeriod"
+          [min]="0"
+          decimals="0">
+        </ejs-numerictextbox>
+      </div>
+      <div class="form-field">
+        <label>Manufacturer</label>
+        <input
+          class="e-input e-field"
+          name="manufacturer"
+          [(ngModel)]="productData.manufacturer"
+          required
+          type="text"
+        />
+      </div>
+    </div>
+
+    <!-- Row: Tags + Return Policy -->
+    <div class="form-row">
+      <div class="form-field">
+        <label>Tags</label>
+        <ejs-dropdownlist
+          id="tags"
+          name="tags"
+          [(ngModel)]="productData.tags"
+          [dataSource]="tagsOptions"
+          [fields]="{ text: 'text', value: 'value' }"
+          placeholder="Select tag"
+          popupHeight="240px">
+        </ejs-dropdownlist>
+      </div>
+      <div class="form-field">
+        <label>Return Policy</label>
+        <input
+          class="e-input e-field"
+          name="returnPolicy"
+          [(ngModel)]="productData.returnPolicy"
+          type="text"
+        />
+      </div>
+    </div>
+
+    <!-- Full-width: Description -->
+    <div class="form-row full">
+      <div class="form-field">
+          <label>Description</label>
+          <textarea
+            class="e-input e-field"
+            name="description"
+            [(ngModel)]="productData.description"
+            rows="3">
+          </textarea>
+        </div>
+      </div>
+    </form>
+  </ng-template>
+
+  </ejs-grid>
+</ejs-tooltip>
+    
+</div>
+
+
+<!-- Read-only display template -->
+<ng-template #ratingTmpl let-data>
+ <input
+    ejs-rating
+    [value]="data.rating"
+    [readOnly]="true"
+    name="rating"
+    [enableAnimation]="false"
+   
+  />
+</ng-template>
+
+
+<!-- ProductID Template -->
+<ng-template #idTemplate let-data>
+  <span class="product-id">{{ data.productId }}</span>
+</ng-template>
+
+<ng-template #productTemplate let-data>
+  <div class="product-cell">
+    <img 
+      [src]="data.productImage 
+             ? data.productImage 
+             : 'assets/default-product.png'" 
+      alt="{{data.productName || 'Product'}}" 
+      class="product-img"
+    />
+    <span class="product-name">{{data.productName}}</span>
+  </div>
+</ng-template>
+
+<!-- Templates -->
+<ng-template #stockQtyTmpl let-data>
+  <span
+    class="qty-badge"
+    [ngClass]="getQtyClass(data.stockQuantity)"
+  >
+    {{ data.stockQuantity }}
+  </span>
+</ng-template>
+
+
+<ng-template #stockStatusTmpl let-data>
+  <span class="status-chip" [ngClass]="getStatusClass(data.stockStatus)">
+    {{ data.stockStatus }}
+  </span>
+</ng-template>
+        
+<ejs-dialog
+  #dialog
+  [visible]="dialogVisible"
+  [header]="(rowData?.productName || '')"
+  [width]="'700px'"
+  [isModal]="true"
+  (beforeOpen)="onBeforeOpen($event)"
+  [showCloseIcon]="true"
+  (close)="dialogClose()"
+>
+<ng-template #content>
+  <div class="product-dialog modern-dialog">
+
+    <!-- Header with Title + Close hint -->
+    <div class="dialog-header">
+      <h3>Product Details</h3>
+      <div class="product-title-highlight">
+        {{ rowData?.brand }} • {{ rowData?.category }}
+      </div>
+    </div>
+
+    <div class="main-content-grid">
+
+      <!-- LEFT: Image + Quick badges -->
+      <div class="product-visual">
+        <div class="image-container">
+          <img 
+            [src]="rowData?.productImage" 
+            alt="{{ rowData?.brand }} {{ rowData?.category }}"
+            class="main-product-img"
+            loading="lazy"
+          />
+
+          <!-- Floating badges -->
+          <div class="image-badges">
+            <span class="badge discount" *ngIf="rowData?.discount > 0">
+              -{{ rowData?.discount }}%
+            </span>
+            <span class="badge featured" *ngIf="rowData?.tags?.includes('Featured')">
+              Featured
+            </span>
+            <span class="badge stock" [class.low]="rowData?.stockQuantity < 10">
+              {{ rowData?.stockStatus }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Rating stars -->
+        <div class="rating-container">
+          <div class="stars">
+            <span *ngFor="let star of [1,2,3,4,5]" 
+                  [class.active]="star <= rowData?.rating"
+                  [class.half]="star - 0.5 === rowData?.rating">
+              ★
+            </span>
+          </div>
+          <span class="rating-text">{{ rowData?.rating }} / 5</span>
+        </div>
+      </div>
+
+      <!-- RIGHT: Details -->
+      <div class="product-info">
+
+        <div class="price-block">
+          <div class="current-price">
+            ${{ rowData?.sellingPrice | number:'1.0-0' }}
+          </div>
+          <div class="mrp-strike">
+            MRP: <s>${{ rowData?.mrp | number:'1.0-0' }}</s>
+          </div>
+        </div>
+
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="label">Product ID</span>
+            <span class="value">{{ rowData?.productId }}</span>
+          </div>
+
+          <div class="info-item">
+            <span class="label">Stock</span>
+            <span class="value">{{ rowData?.stockQuantity }} units</span>
+          </div>
+
+          <div class="info-item">
+            <span class="label">Min. Order</span>
+            <span class="value">{{ rowData?.minimumOrderQuantity }}</span>
+          </div>
+
+          <div class="info-item">
+            <span class="label">Manufacturer</span>
+            <span class="value">{{ rowData?.manufacturer }}</span>
+          </div>
+        </div>
+
+        <!-- Tags -->
+        <div class="tags-container">
+         
+          <span class="tag" *ngFor="let tag of (rowData?.tags || '').split(',')">
+            {{ tag.trim() }}
+          </span>
+        </div>
+
+        <!-- Description -->
+        <div class="description">
+          <h4>Description</h4>
+          <p>{{ rowData?.description }}</p>
+        </div>
+
+        <!-- Footer info -->
+        <div class="footer-info">
+          <div>Warranty: <strong>{{ rowData?.warrantyPeriod }} Years</strong></div>
+          <div>↩ Return: <strong>{{ rowData?.returnPolicy }}</strong></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+</ejs-dialog>
+
+
+<!--dialog template -->
+
+
+
+
+
+<style>
+    .cell-product {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.thumb {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  object-fit: cover;
+  box-shadow: 0 0 0 3px #f2f4f7;
+}
+.title { font-weight: 500; color: #1f2937; }
+</style>
+

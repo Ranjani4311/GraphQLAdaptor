@@ -1,0 +1,89 @@
+#Grid Sort direction
+
+input Sort {
+    name: String
+    direction: String
+} 
+
+# --- Aggregates ---
+input AggregateInput {
+  field: String!
+  type: String!      # e.g., "sum", "avg", "min", "max", "count"
+}
+
+# --- Syncfusion DataManager payload ---
+input DataManagerInput {
+  skip: Int
+  take: Int
+  sorted: [Sort]
+  group: [String!]
+  table: String
+  select: [String!]
+  where: String       # JSON string (Syncfusion predicate array)
+  search: String      # JSON string (Syncfusion search params)
+  requiresCounts: Boolean
+  aggregates: [AggregateInput!]
+  params: String
+}
+
+# --- Product input (for mutations) ---
+input ProductInput {
+  productId: String!
+  productName: String
+  category: String
+  brand: String
+  mrp: Float
+  discount: Float
+  stockQuantity: Int
+  stockStatus: String
+  rating: Float
+  
+  productImage: String        # <-- add this
+  description: String         # <-- if you plan to send it
+  minimumOrderQuantity: Int   # <-- if you plan to send it
+  manufacturer: String     # <-- if you plan to send it
+  tags: String              # <-- if you plan to send it
+  warrantyPeriod: Int      # <-- if you plan to send it
+  returnPolicy: String  
+
+ 
+}
+
+# --- Product type (catalog fields) ---
+type Product {
+  productId: String!
+  productImage: String
+  productName: String
+  category: String
+  brand: String
+  sellingPrice: Float
+  mrp: Float
+  discount: Float
+  stockQuantity: Int
+  stockStatus: String
+  rating: Float
+  description: String
+  minimumOrderQuantity: Int
+  manufacturer: String
+  tags: String
+  warrantyPeriod: Int
+  returnPolicy: String
+}
+
+# --- Return type for Grid paging ---
+type ReturnType {
+  result: [Product!]!
+  count: Int!
+  aggregates: String
+}
+
+type Query {
+  getProducts(datamanager: DataManagerInput): ReturnType!
+  getProductById(datamanager: DataManagerInput): Product
+}
+
+type Mutation {
+  createProduct(value: ProductInput!): Product!
+  updateProduct(key: String!, keyColumn: String, value: ProductInput!): Product
+  deleteProduct(key: String!, keyColumn: String): Product!
+}
