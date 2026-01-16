@@ -78,28 +78,28 @@ export const brandData: { text: string; value: string }[] = [
 export const categoryData: { text: string; value: string }[] = [
 
     { text: "Accessories", value: "Accessories" },
-  { text: "Automotive", value: "Automotive" },
-  { text: "Electronics", value: "Electronics" },
-  { text: "Footwear", value: "Footwear" },
-  { text: "Home & Living", value: "Home & Living" },
-  { text: "Home Appliances", value: "Home Appliances" },
-  { text: "Kitchen & Dining", value: "Kitchen & Dining" },
-  { text: "Outdoor", value: "Outdoor" },
-  { text: "Personal Care", value: "Personal Care" },
-  { text: "Sports & Outdoors", value: "Sports & Outdoors" },
-  { text: "Stationery", value: "Stationery" }
+    { text: "Automotive", value: "Automotive" },
+    { text: "Electronics", value: "Electronics" },
+    { text: "Footwear", value: "Footwear" },
+    { text: "Home & Living", value: "Home & Living" },
+    { text: "Home Appliances", value: "Home Appliances" },
+    { text: "Kitchen & Dining", value: "Kitchen & Dining" },
+    { text: "Outdoor", value: "Outdoor" },
+    { text: "Personal Care", value: "Personal Care" },
+    { text: "Sports & Outdoors", value: "Sports & Outdoors" },
+    { text: "Stationery", value: "Stationery" }
 ]
 
-  export const stockStatusOptions :{ text: string; value: string }[]= [
+export const stockStatusOptions :{ text: string; value: string }[]= [
     { text: 'In Stock', value: 'In Stock' },
     { text: 'Limited', value: 'Limited' },
     { text: 'Out of Stock', value: 'Out of Stock' }
-  ];
+];
 
-  export const tagsOptions : { text: string; value: string }[] = [
+export const tagsOptions : { text: string; value: string }[] = [
     { text: 'Best Seller', value: 'Best Seller' },
     { text: 'New Arrival', value: 'New Arrival' },
-   { text: 'Featured', value: 'Featured' },
-   { text: 'Clearance', value: 'Clearance' },
-   { text: 'Limited Edition', value: 'Limited' }
-  ];
+    { text: 'Featured', value: 'Featured' },
+    { text: 'Clearance', value: 'Clearance' },
+    { text: 'Limited Edition', value: 'Limited' }
+];

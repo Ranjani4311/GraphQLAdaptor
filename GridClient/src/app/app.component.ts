@@ -8,7 +8,6 @@ import { Dialog, TooltipComponent, TooltipEventArgs } from '@syncfusion/ej2-angu
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import  { stockStatusOptions , categoryData, brandData, tagsOptions}  from '../../src/data'
 
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -26,6 +25,7 @@ export class AppComponent implements OnInit {
   public filterSettings!: FilterSettingsModel;
   public strm?:string;
   public productData: any = {};
+  previewObjectUrl: string | undefined;
 
   constructor(private sanitizer: DomSanitizer) {}
 
@@ -132,8 +132,7 @@ export class AppComponent implements OnInit {
       this.commands = [{ buttonOption: { content: 'More Details', cssClass: 'e-primary' } }];
   }
  
-
-  previewObjectUrl: string | undefined;
+  
   onFileSelected(args: SelectedEventArgs): void {
 
     const file= args?.filesData?.[0]?.rawFile;
@@ -252,23 +251,12 @@ export class AppComponent implements OnInit {
       args.maxHeight = '100rem';
   }
 
-     // Optional but very useful for memory management
+  // Optional but very useful for memory management
   ngOnDestroy(): void {
     if (this.currentImagePreview) {
       URL.revokeObjectURL(this.currentImagePreview);
     }
   }
-
- 
-
-
-  
-
-
-
-
-
-
 
   openDetailsDialog(details: any) {
     this.rowData = details;
@@ -282,27 +270,25 @@ export class AppComponent implements OnInit {
   }
 
 
-beforeRender(args: TooltipEventArgs): void {
-    const target = args.target as HTMLElement;
+  beforeRender(args: TooltipEventArgs): void {
+      const target = args.target as HTMLElement;
 
-    // Guard: ensure we're on a data cell in ProductName column only
-    if (!target.classList.contains('e-rowcell') || !target.classList.contains('pn-cell')) {
-      // Cancel if somehow triggered elsewhere
-      (args as any).cancel = true;
-      return;
-    }
+      // Guard: ensure we're on a data cell in ProductName column only
+      if (!target.classList.contains('e-rowcell') || !target.classList.contains('pn-cell')) {
+        // Cancel if somehow triggered elsewhere
+        (args as any).cancel = true;
+        return;
+      }
 
-    // OPTIONAL: show tooltip only when text overflows
-    if (!this.isTruncated(target)) {
-      (args as any).cancel = true;
-      return;
-    }
+      // OPTIONAL: show tooltip only when text overflows
+      if (!this.isTruncated(target)) {
+        (args as any).cancel = true;
+        return;
+      }
 
-    // Set tooltip content to the cell's visible text
-    (this as any).tooltip.content = target.innerText?.trim() ?? '';
+      // Set tooltip content to the cell's visible text
+      (this as any).tooltip.content = target.innerText?.trim() ?? '';
   }
-
-  
 
 public commandClick(args: CommandClickEventArgs): void {
   const productId = (args as any).rowData.productId; // e.g., "PROD000001"
@@ -320,7 +306,7 @@ public commandClick(args: CommandClickEventArgs): void {
       this.openDetailsDialog({ ...args.rowData, ...res.result });
     })
     .catch(err => console.error('Error fetching details:', err));
-}
+  }
 
   public dialogClose(): void {
     this.dialogVisible = false;
