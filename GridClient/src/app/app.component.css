@@ -1,0 +1,373 @@
+
+/* Two-column form grid */
+.edit-dialog-form.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px 20px; /* row gap, column gap */
+}
+
+/* Allow rows to “merge” their child fields into the main grid */
+.form-row {
+  display: contents; /* lets .form-field act as direct grid children */
+}
+
+/* Any row that should take full width */
+.form-row.full .form-field {
+  grid-column: 1 / -1; /* span across both columns */
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Product image block */
+.image-upload-field .image-field {
+  display: grid;
+  grid-template-columns: 120px auto; /* preview + uploader side by side */
+  align-items: center;
+  gap: 12px;
+}
+
+.image-upload-field .preview {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb; /* gray-200 */
+}
+
+/* Make uploader occupy full width of its cell */
+#productImageUploader {
+  width: 100%;
+}
+
+/* Labels */
+.form-field > label {
+  font-weight: 600;
+  color: #374151; /* gray-700 */
+}
+
+
+/* Responsive: stack to single column on small screens */
+@media (max-width: 768px) {
+  .edit-dialog-form.two-col .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* Fill rating stars with yellow */
+.e-rating-container.custom-fill .e-rating-item-container .e-rating-icon {
+    color: #FFD700; /* Classic gold yellow */
+}
+
+
+
+.e-rating-container.custom-fill .e-rating-item-container .e-rating-icon {
+  color: #d6d5d1;               /* fallback */
+  color: oklch(90.5% 0.03 98);  /* soft light neutral in OKLCH */
+}
+
+
+/* Product cell */
+.product-id {
+  color: oklch(48.8% 0.243 264.376); /* Bootstrap blue or choose your shade */
+  font-weight: 400; /* optional for emphasis */
+}
+
+
+.product-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.product-img {
+  width: 45px; /* adjust as needed */
+  height: 45px;
+  object-fit: contain; /* keeps aspect ratio */
+  border: none; /* removes border */
+  border-radius: 0; /* removes rounded corners */
+  background: transparent; /* ensures no background color */
+  box-shadow: none; /* removes any shadow */
+}
+
+
+
+/* Quantity badge */
+.qty-badge {
+  display: inline-block;
+  min-width: 36px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: 600;
+  background: #eef2ff;
+  color: #1f2937;
+}
+.qty-ok  { background: #e6ffed; color: #065f46; }  /* green */
+.qty-low { background: #fff7ed; color: #9a3412; }  /* orange */
+.qty-zero{ background: #fee2e2; color: #7f1d1d; }  /* red */
+
+/* Status chip */
+.status-chip {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+}
+.control-section{
+    margin:20px;
+    height: 800px;
+}
+.status-in   { background: #dcfce7; color: #166534; }   /* In Stock */
+.status-low  { background: #fef3c7; color: #92400e; }   /* Low */
+.status-out  { background: #fee2e2; color: #7f1d1d; }   /* Out of Stock */
+.status-unknown { background: #e5e7eb; color: #374151; }
+
+
+
+/* Dialog custom styles */
+.e-dialog .e-dlg-header-content {
+    border-bottom: 0;
+    padding: 10px 18px;
+}
+
+.modern-dialog {
+  padding: 0;
+  max-width: 820px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.22);
+}
+
+.dialog-header {
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+  color: white;
+  padding: 5px;
+  text-align: center;
+
+  h3 {
+    margin: 0;
+    font-weight: 600;
+    
+  }
+
+  .product-title-highlight {
+    margin-top: 0.2rem;
+    opacity: 0.9;
+    font-size: 0.7rem;
+  }
+}
+
+.main-content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr;
+  gap: 2.5rem;
+  padding: 1rem;
+}
+
+.product-visual {
+  position: relative;
+}
+
+.cell-product {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.thumb {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  object-fit: cover;
+  box-shadow: 0 0 0 3px #f2f4f7;
+}
+.title { font-weight: 500; color: #1f2937; }
+
+.main-product-img {
+  width: 100%;
+  height: auto;
+  max-height: 380px;             /* prevent it from becoming gigantic */
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  cursor: default;
+}
+
+.image-container {
+  background: #f9fafb;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+}
+
+/* Optional: make it feel more like a static product photo */
+.product-visual {
+  cursor: default;
+}
+
+/* If you ever want to allow zoom later, you can override with a button */
+.zoomable .main-product-img {
+  pointer-events: auto;
+  cursor: zoom-in;
+}
+
+/* Badges now in normal flow - centered or left-aligned as you prefer */
+.image-badges.below-image {
+  position: static;             /* ← most important: remove absolute/floating */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;                     /* space between badges */
+  justify-content: center;      /* or flex-start / space-between */
+  margin: 8px 0 12px 0;         /* vertical spacing */
+  padding: 0 8px;
+}
+
+/* Optional: make badges look nicer when not floating */
+.badge {
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+.badge.stock {
+  background-color: #38a169;
+  color: white;
+}
+
+.badge.stock.low {
+  background-color: #dd6b20;
+}
+
+/* If you want them more compact */
+.image-badges.below-image .badge {
+  padding: 3px 9px;
+  font-size: 0.75rem;
+}
+.discount { background: #2dd383; }
+.featured { background: #8b5cf6; }
+.stock   { background: #10b981; }
+.stock.low { background: #f59e0b; }
+
+.rating-container {
+  margin-top: 1.2rem;
+  text-align: center;
+  font-size: 1.4rem;
+
+  .stars {
+    color: #e5e7eb;
+    margin-bottom: 0.3rem;
+
+    .active { color: #fbbf24; }
+    .half   { color: #fbbf24; opacity: 0.6; }
+  }
+
+  .rating-text {
+    font-size: 0.95rem;
+    color: #64748b;
+  }
+}
+
+.price-block {
+  margin-bottom: 1.8rem;
+
+  .current-price {
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #1e40af;
+    line-height: 1;
+  }
+
+  .mrp-strike {
+    color: #64748b;
+    font-size: 1.1rem;
+    margin-top: 0.3rem;
+  }
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem 2rem;
+  margin-bottom: 1.8rem;
+}
+
+.info-item {
+  .label {
+    display: block;
+    color: #64748b;
+    font-size: 0.82rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .value {
+    font-weight: 600;
+    color: #1e293b;
+  }
+}
+
+.tags-container {
+  margin: 1.5rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.tag {
+  background: #e0f2fe;
+  color: #0369a1;
+  padding: 5px 14px;
+  border-radius: 30px;
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.description {
+  h4 {
+    margin: 0 0 0.8rem;
+    color: #1e293b;
+    font-size: 1.15rem;
+  }
+
+  p {
+    color: #475569;
+    line-height: 1.6;
+    margin: 0;
+  }
+}
+
+.footer-info {
+  margin-top: 2rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  color: #475569;
+  font-size: 0.95rem;
+
+  strong {
+    color: #1e293b;
+  }
+}
+
+
+.form-field.image-upload-field {
+  .image-field {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 8px;
+
+    .preview {
+      width: 100px;
+      height: 100px;
+    }
+  }
+}
