@@ -9,10 +9,6 @@
 @import '../node_modules/@syncfusion/ej2-notifications/styles/tailwind.css';
 @import '../node_modules/@syncfusion/ej2-angular-grids/styles/tailwind.css';
 
-.grid-wrapper {
-  
-}
-
 /* Two-column form grid */
 .edit-dialog-form.two-col {
   display: grid;
@@ -204,43 +200,70 @@
 }
 .title { font-weight: 500; color: #1f2937; }
 
+.main-product-img {
+  width: 100%;
+  height: auto;
+  max-height: 380px;             /* prevent it from becoming gigantic */
+  object-fit: contain;
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  cursor: default;
+}
+
 .image-container {
-  position: relative;
+  background: #f9fafb;
   border-radius: 12px;
   overflow: hidden;
-  background: #f8fafc;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-
-  .main-product-img {
-    width: 100%;
-    height: auto;
-    object-fit: contain;
-    aspect-ratio: 4/3;
-    transition: transform 0.4s ease;
-  }
-
-  &:hover .main-product-img {
-    transform: scale(1.04);
-  }
+  margin-bottom: 16px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
 }
 
-.image-badges {
-  position: absolute;
-  top: 12px;
-  left: 12px;
+/* Optional: make it feel more like a static product photo */
+.product-visual {
+  cursor: default;
+}
+
+/* If you ever want to allow zoom later, you can override with a button */
+.zoomable .main-product-img {
+  pointer-events: auto;
+  cursor: zoom-in;
+}
+
+/* Badges now in normal flow - centered or left-aligned as you prefer */
+.image-badges.below-image {
+  position: static;             /* ← most important: remove absolute/floating */
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 8px;                     /* space between badges */
+  justify-content: center;      /* or flex-start / space-between */
+  margin: 8px 0 12px 0;         /* vertical spacing */
+  padding: 0 8px;
 }
 
+/* Optional: make badges look nicer when not floating */
 .badge {
-  padding: 6px 12px;
-  border-radius: 20px;
-  font-size: 0.78rem;
+  padding: 4px 10px;
+  font-size: 0.8rem;
   font-weight: 600;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+.badge.stock {
+  background-color: #38a169;
   color: white;
 }
 
+.badge.stock.low {
+  background-color: #dd6b20;
+}
+
+/* If you want them more compact */
+.image-badges.below-image .badge {
+  padding: 3px 9px;
+  font-size: 0.75rem;
+}
 .discount { background: #2dd383; }
 .featured { background: #8b5cf6; }
 .stock   { background: #10b981; }

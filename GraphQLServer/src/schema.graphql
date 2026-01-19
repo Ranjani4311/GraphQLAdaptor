@@ -32,6 +32,7 @@ input ProductInput {
   productName: String
   category: String
   brand: String
+  sellingPrice: Float
   mrp: Float
   discount: Float
   stockQuantity: Int

@@ -2,8 +2,6 @@
 
 This guide provides a **fully detailed, step‑by‑step, professionally formatted**, and easy‑to‑understand explanation of how to build a GraphQL backend and connect it with the Syncfusion Angular Grid using the GraphQLAdaptor.
 
-It is written based **entirely on your original README content**, expanded and structured clearly.
-
 ---
 # Table of Contents
 1. Introduction to GraphQL

@@ -38,7 +38,6 @@ export class AppComponent implements OnInit {
   currentImagePreview: string | null = null;          // for temporary preview URL
   currentImageBase64: string | null = null;           // optional: if you want to save as base64
 
-  // If you're using @ViewChild for the uploader (optional but recommended)
   @ViewChild('productImageUploader') uploader?: UploaderComponent;
 
   public path: object = {
@@ -192,7 +191,7 @@ export class AppComponent implements OnInit {
     }
 
     if (args.requestType === 'save') {
-      debugger
+
       this.productData['productImage'] = (this.strm != null) ? this.strm : this.productData['productImage'];
       if (this.productForm) {
         args.data = this.productData;
@@ -321,7 +320,7 @@ public commandClick(args: CommandClickEventArgs): void {
     }
 
     getBase64(file:File): any {
-      debugger
+
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = () => {
