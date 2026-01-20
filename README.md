@@ -69,6 +69,7 @@ The E-Commerce is a web app for View the Product Details:
     - Display products in a grid with paging/sorting/filtering/search.
     - CRUD operations via dialog editing.
     - Server-side processing for efficiency.
+    - Each row has a More Details button that fetches extended information (e.g., Warrenty, Description etc) for that specific product.
   - Stack:
     - Backend: Node.js, TypeScript, GraphQL.
     - Frontend: Angular (standalone), Syncfusion EJ2 Grid, GraphQLAdaptor.
