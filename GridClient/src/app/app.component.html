@@ -1,24 +1,22 @@
 <div class="grid-wrapper">
   <ejs-tooltip #tooltip target=".e-rowcell" (beforeRender)="beforeRender($event)">
-  <ejs-grid [dataSource]='data' [allowPaging]="true" [allowSorting]="true" [allowFiltering]="true"
-  [pageSettings]="pageSettings" [editSettings]="editSettings" [toolbar]="toolbar" (commandClick)="commandClick($event)" [filterSettings]="filterSettings" (actionBegin)="actionBegin($event)" (actionComplete)="actionComplete($event)">
-  <e-columns>
-      <e-column field='productId' headerText='Product ID' textAlign='Right' width=150 isPrimaryKey='true' [template]="idTemplate"></e-column>
-      <e-column field='productName' headerText="Product" width="260" [template]="productTemplate"  [customAttributes]="{ class: 'pn-cell' }"></e-column>
-      <e-column field='category' headerText='Category' width=120  [customAttributes]="{ class: 'pn-cell' }"></e-column>
-      <e-column field='brand' headerText='Brand' width=120></e-column>
-      <e-column field="rating" headerText="Rating" width="150" [template]="ratingTmpl"  textAlign="Right"></e-column>
-      <e-column field='mrp' headerText='MRP' width=120 [format]="{ format: 'C2', currency: 'INR' }" textAlign="Right"></e-column>
-      <e-column field='discount' headerText='Discount' width=110 [format]="{ format: 'P0' }"  textAlign="Right"
-     ></e-column>
-      <e-column field='stockQuantity' headerText='Quantity' width=110 [template]="stockQtyTmpl"  textAlign="Right" [allowFiltering]="false"></e-column>
-      <e-column field='stockStatus' headerText='Stock Status' width=150  [template]="stockStatusTmpl"></e-column> 
-      <e-column headerText='Commands' width=150 [commands]='commands'></e-column> 
-  </e-columns>
-    
-<!-- Edit dialog template: two-column layout -->
-
-<ng-template #editSettingsTemplate let-data>
+    <ejs-grid [dataSource]='data' [allowPaging]="true" [allowSorting]="true" [allowFiltering]="true"
+    [pageSettings]="pageSettings" [editSettings]="editSettings" [toolbar]="toolbar" (commandClick)="commandClick($event)" [filterSettings]="filterSettings" (actionBegin)="actionBegin($event)" (actionComplete)="actionComplete($event)">
+    <e-columns>
+        <e-column field='productId' headerText='Product ID' textAlign='Right' width=150 isPrimaryKey='true' [template]="idTemplate"></e-column>
+        <e-column field='productName' headerText="Product" width="260" [template]="productTemplate"  [customAttributes]="{ class: 'pn-cell' }"></e-column>
+        <e-column field='category' headerText='Category' width=120  [customAttributes]="{ class: 'pn-cell' }"></e-column>
+        <e-column field='brand' headerText='Brand' width=120></e-column>
+        <e-column field="rating" headerText="Rating" width="150" [template]="ratingTmpl"  textAlign="Right"></e-column>
+        <e-column field='mrp' headerText='MRP' width=120 [format]="{ format: 'C2', currency: 'INR' }" textAlign="Right"></e-column>
+        <e-column field='discount' headerText='Discount' width=110 [format]="{ format: 'P0' }"  textAlign="Right"
+      ></e-column>
+        <e-column field='stockQuantity' headerText='Quantity' width=110 [template]="stockQtyTmpl"  textAlign="Right" [allowFiltering]="false"></e-column>
+        <e-column field='stockStatus' headerText='Stock Status' width=150  [template]="stockStatusTmpl"></e-column> 
+        <e-column headerText='Commands' width=150 [commands]='commands'></e-column> 
+    </e-columns> 
+    <!-- Edit dialog template: two-column layout -->
+    <ng-template #editSettingsTemplate let-data>
   <form ngForm #productForm="ngForm" class="edit-dialog-form two-col">
     <!-- Top row: ID + Name -->
     <div class="form-row">
@@ -241,7 +239,6 @@
       </div>
     </form>
   </ng-template>
-
   </ejs-grid>
 </ejs-tooltip>
     

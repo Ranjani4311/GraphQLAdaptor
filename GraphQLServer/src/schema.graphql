@@ -1,5 +1,4 @@
 #Grid Sort direction
-
 input Sort {
     name: String
     direction: String
@@ -38,13 +37,12 @@ input ProductInput {
   stockQuantity: Int
   stockStatus: String
   rating: Float
-  
-  productImage: String        # <-- add this
-  description: String         # <-- if you plan to send it
-  minimumOrderQuantity: Int   # <-- if you plan to send it
-  manufacturer: String     # <-- if you plan to send it
-  tags: String              # <-- if you plan to send it
-  warrantyPeriod: Int      # <-- if you plan to send it
+  productImage: String    
+  description: String        
+  minimumOrderQuantity: Int   
+  manufacturer: String     
+  tags: String              
+  warrantyPeriod: Int      
   returnPolicy: String  
 
  

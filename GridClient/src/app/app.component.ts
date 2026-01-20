@@ -190,15 +190,15 @@ export class AppComponent implements OnInit {
         .catch(err => console.error('Error fetching full product:', err));
     }
 
-    if (args.requestType === 'save') {
+      if (args.requestType === 'save') {
 
-      this.productData['productImage'] = (this.strm != null) ? this.strm : this.productData['productImage'];
-      if (this.productForm) {
-        args.data = this.productData;
-      } else {
-        args.cancel = true;
+        this.productData['productImage'] = (this.strm != null) ? this.strm : this.productData['productImage'];
+        if (this.productForm) {
+          args.data = this.productData;
+        } else {
+          args.cancel = true;
+        }
       }
-    }
   }
 
   actionComplete(args: any): void {
@@ -258,12 +258,13 @@ export class AppComponent implements OnInit {
   }
 
   openDetailsDialog(details: any) {
+    details.sellingPrice=  details.mrp - (details.mrp * details.discount); 
     this.rowData = details;
     this.dialogVisible = true;
   }
 
     
- // Optional: only show tooltip when content is truncated
+ // helper function
   private isTruncated(el: HTMLElement): boolean {
     return el.scrollWidth > el.clientWidth;
   }
@@ -289,42 +290,36 @@ export class AppComponent implements OnInit {
       (this as any).tooltip.content = target.innerText?.trim() ?? '';
   }
 
-public commandClick(args: CommandClickEventArgs): void {
-  const productId = (args as any).rowData.productId; // e.g., "PROD000001"
-
-  if (!productId) {
-    console.error('Missing productId');
-    return;
-  }
-
-  // Build Query and add variable named exactly "id"
-  const query = new Query().addParams('id', productId);
-
-  this.detailsManager.executeQuery(query)
-    .then((res: any) => {
-      this.openDetailsDialog({ ...args.rowData, ...res.result });
-    })
-    .catch(err => console.error('Error fetching details:', err));
-  }
+  public commandClick(args: CommandClickEventArgs): void {
+    const productId = (args as any).rowData.productId; // e.g., "PROD000001"
+    // Build Query and add variable named exactly "id"
+    const query = new Query().addParams('id', productId);
+    
+    this.detailsManager.executeQuery(query)
+      .then((res: any) => {
+        this.openDetailsDialog({ ...args.rowData, ...res.result });
+      })
+      .catch(err => console.error('Error fetching details:', err));
+    }
 
   public dialogClose(): void {
     this.dialogVisible = false;
   }
 
-   onUploadSuccess(args: SuccessEventArgs) {
-        if (args.operation === 'upload') {
-            const fileBlob = (args.file as FileInfo).rawFile as Blob;
-            const file = new File([fileBlob], (args.file as FileInfo).name);
-            this.strm = this.getBase64(file);
-        }
-    }
+  onUploadSuccess(args: SuccessEventArgs) {
+      if (args.operation === 'upload') {
+          const fileBlob = (args.file as FileInfo).rawFile as Blob;
+          const file = new File([fileBlob], (args.file as FileInfo).name);
+          this.strm = this.getBase64(file);
+      }
+  }
 
-    getBase64(file:File): any {
+  getBase64(file:File): any {
 
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-            this.strm = reader.result as string;
-        };
-    }
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+          this.strm = reader.result as string;
+      };
+  }
 }

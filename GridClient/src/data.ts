@@ -92,7 +92,6 @@ export const categoryData: { text: string; value: string }[] = [
 
 export const stockStatusOptions :{ text: string; value: string }[]= [
     { text: 'In Stock', value: 'In Stock' },
-    { text: 'Limited', value: 'Limited' },
     { text: 'Out of Stock', value: 'Out of Stock' }
 ];
 

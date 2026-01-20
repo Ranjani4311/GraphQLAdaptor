@@ -11,59 +11,55 @@ const resolvers = {
 
       let orders = [...productDetails];
       const query = new Query();
+      // 1. Filtering
+      const performFiltering = (filterString) => {
+        const parsed = JSON.parse(filterString);
 
-    // ───────────────────────────────────────────────────────────────
-    // 1. Filtering
-    // ───────────────────────────────────────────────────────────────
-    const performFiltering = (filterString) => {
-      const parsed = JSON.parse(filterString);
+        // Some filter UIs send an array of groups; commonly you want the first group
+        // Adjust this if your payload is different
+        const group = Array.isArray(parsed) ? parsed[0] : parsed;
 
-      // Some filter UIs send an array of groups; commonly you want the first group
-      // Adjust this if your payload is different
-      const group = Array.isArray(parsed) ? parsed[0] : parsed;
-
-      // Guard
-      if (!group || !Array.isArray(group.predicates) || group.predicates.length === 0) {
-        return query; // nothing to apply
-      }
-
-      const condition = (group.condition || 'and').toLowerCase(); // 'and' | 'or'
-      const ignoreCase = group.ignoreCase !== undefined ? !!group.ignoreCase : true;
-
-      // Build a combined Predicate chain
-      let combined = null;
-
-      group.predicates.forEach(p => {
-        // If the format nests groups, handle recursively
-        if (p.isComplex && Array.isArray(p.predicates)) {
-          // Recursively build nested group predicate
-          const nested = buildGroupPredicate(p, ignoreCase);
-          if (nested) {
-            combined = combined
-              ? (condition === 'or' ? combined.or(nested) : combined.and(nested))
-              : nested;
-          }
-          return;
+        // Guard
+        if (!group || !Array.isArray(group.predicates) || group.predicates.length === 0) {
+          return query; // nothing to apply
         }
 
-        // Leaf predicate
-        const pred = new Predicate(p.field, p.operator, p.value, ignoreCase);
-        combined = combined
-          ? (condition === 'or' ? combined.or(pred) : combined.and(pred))
-          : pred;
-      });
+        const condition = (group.condition || 'and').toLowerCase(); // 'and' | 'or'
+        const ignoreCase = group.ignoreCase !== undefined ? !!group.ignoreCase : true;
 
-      // Clear previous where clauses if needed (optional depending on your lifecycle)
-      // query.queries = query.queries.filter(q => q.fn !== 'where');
+        // Build a combined Predicate chain
+        let combined = null;
 
-      if (combined) {
-        query.where(combined);
-      }
+        group.predicates.forEach(p => {
+          // If the format nests groups, handle recursively
+          if (p.isComplex && Array.isArray(p.predicates)) {
+            // Recursively build nested group predicate
+            const nested = buildGroupPredicate(p, ignoreCase);
+            if (nested) {
+              combined = combined
+                ? (condition === 'or' ? combined.or(nested) : combined.and(nested))
+                : nested;
+            }
+            return;
+          }
 
-      return query;
-    };
+          // Leaf predicate
+          const pred = new Predicate(p.field, p.operator, p.value, ignoreCase);
+          combined = combined
+            ? (condition === 'or' ? combined.or(pred) : combined.and(pred))
+            : pred;
+        });
 
-     // Helper for nested groups
+        // Clear previous where clauses if needed (optional depending on your lifecycle)
+        // query.queries = query.queries.filter(q => q.fn !== 'where');
+
+        if (combined) {
+          query.where(combined);
+        }
+
+        return query;
+      };
+      // Helper for nested groups
       function buildGroupPredicate(group, ignoreCase) {
         const condition = (group.condition || 'and').toLowerCase();
         let combined = null;
@@ -84,19 +80,13 @@ const resolvers = {
 
         return combined;
       }
-
-
-      // ───────────────────────────────────────────────────────────────
+  
       // 2. Searching (uncomment when you want to support grid search)
-      // ───────────────────────────────────────────────────────────────
       const performSearching = (searchParam) => {
         const { fields, key } = JSON.parse(searchParam)[0];
         query.search(key, fields);
       }
-
-      // ───────────────────────────────────────────────────────────────
       // 3. Sorting
-      // ───────────────────────────────────────────────────────────────
      const performSorting = (sorted) => {
         for (let i = 0; i < sorted.length; i++) {
           const { name, direction } = sorted[i];
@@ -121,9 +111,7 @@ const resolvers = {
       // Total count after filtering
       const count = filteredData.length;
 
-      // ───────────────────────────────────────────────────────────────
       // 4. Paging
-      // ───────────────────────────────────────────────────────────────
       let result = filteredData;
 
       if (datamanager.take !== undefined) {
@@ -140,12 +128,6 @@ const resolvers = {
       };
     },
 
-    
-    
-    
-    // ───────────────────────────────────────────────────────────────
-    // Dedicated single product query (recommended for "More Details")
-    // ───────────────────────────────────────────────────────────────
     getProductById: (parent, { datamanager }) => {
       console.log('getProductById called with datamanager:', datamanager);
 
