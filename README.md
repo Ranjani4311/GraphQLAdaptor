@@ -3,21 +3,32 @@
 This guide provides a **fully detailed, step‑by‑step, professionally formatted**, and easy‑to‑understand explanation of how to build a GraphQL backend and connect it with the Syncfusion Angular Grid using the GraphQLAdaptor.
 
 ---
-# Table of Contents
-1. Introduction
-2. What is GraphQL?
-3. What is Syncfusion Data Grid?
-4. How to Connect Syncfusion Angular Grid to GraphQL
-5. Application Overview
-6. Prerequisites
-7. Step-by-Step Configuration
-      - Folder Structure
-      - Server Setup (GraphQL Backend)
-      - Client Setup (Angular Frontend)
-8. How to Run the Server and Application
-9. FAQ
-10. Common Mistakes and How to Avoid Them
+# Connecting the Syncfusion React Grid with GraphQL
 
+This guide provides a **fully detailed, step‑by‑step,**, and easy‑to‑understand explanation of how to build a GraphQL backend and connect it with the Syncfusion Angular Grid using the GraphQLAdaptor.
+
+1. Introduction to GraphQL
+2. Connecting the Syncfusion React Grid with GraphQL
+    - Prerequisites
+    - Server Setup Guide
+        - Setup GraphQL server environment
+        - Install Required Dependencies
+        - TypeScript configuration
+        - Defining the schema
+        - Implement Resolvers
+        - Launch the GraphQL server
+    - Client Setup Guide
+        - Setup local environment 
+        - Adding Syncfusion Grid package
+        - Include CSS references
+        - Configure DataManager with GraphQLAdaptor
+        - Run the Application
+3. Performing Data Operations with GraphQLAdaptor
+    - Handling filtering
+    - Handling searching
+    - Handling sorting
+    - Handling paging
+    - Handling CRUD
 ---
 # 1.  Introduction 
 This documentation provides a complete, beginner-friendly guide to integrating the Syncfusion Angular Grid with a GraphQL backend using the official GraphQLAdaptor. The focus is on building an Employee Expense Tracker application, where the grid handles server-driven operations like paging, sorting, filtering, searching, and CRUD (Create, Read, Update, Delete) via GraphQL queries and mutations.
